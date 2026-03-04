@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // 1. Novo import
 import { HlmButton } from '../../../../libs/ui/button/src/lib/hlm-button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -17,6 +18,7 @@ import { EvaluationService } from '../../core/services/evaluation/evaluation';
 export class LoginComponent {
   private authService = inject(AuthService);
   private evaluationService = inject(EvaluationService);
+  private http = inject(HttpClient); // 2. Injetando o HttpClient para o teste
 
   isLoading = signal(false);
   isFlipped = signal(false);
@@ -43,7 +45,6 @@ export class LoginComponent {
   }
 
   submitReview() {
-    // Chama a service limpa
     this.evaluationService.submitAppEvaluation(this.rating(), this.feedbackText())
       .subscribe({
         next: (response) => {
@@ -53,9 +54,16 @@ export class LoginComponent {
           this.toggleFlip();
         },
         error: (err) => {
-          console.error('Erro ao salvar avaliação. A API .NET já está rodando?', err);
+          // O console.error pode continuar aqui se quiser, mas o Toast já vai aparecer globalmente
+          console.error('Erro na chamada', err);
           this.toggleFlip();
         }
       });
+  }
+
+  // 3. Método para forçar o erro no interceptor
+  simulateError() {
+    // Faz uma requisição para uma porta que (provavelmente) não tem nada rodando
+    this.http.get('http://localhost:9999/api/simular-falha').subscribe();
   }
 }

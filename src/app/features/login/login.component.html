@@ -85,7 +85,7 @@
     </div>
   </div>
 
-  <footer class="absolute bottom-6 flex flex-col items-center gap-2 text-center text-xs text-muted-foreground">
+<footer class="absolute bottom-6 flex flex-col items-center gap-2 text-center text-xs text-muted-foreground">
     <p>
       Desenvolvido por
       <a href="https://linkedin.com/in/seu-perfil" target="_blank" rel="noopener noreferrer"
@@ -103,6 +103,10 @@
         class="hover:text-foreground transition-colors">
         Repositório do Projeto
       </a>
+      <span>&middot;</span>
+      <button (click)="simulateError()" class="cursor-pointer hover:text-destructive transition-colors">
+        Simular Erro
+      </button>
     </div>
   </footer>
 
