@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "vitest",
+    "format": "prettier --write \"src/**/*.{ts,html,css}\"",
+    "spartan": "spartan"
   },
   "private": true,
   "packageManager": "npm@11.8.0",
@@ -18,6 +20,8 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@ng-icons/core": "^31.4.0",
+    "@ng-icons/lucide": ">=32.0.0 <34.0.0",
     "@spartan-ng/brain": "^0.0.1-alpha.644",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
