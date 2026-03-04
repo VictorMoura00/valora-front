@@ -3,9 +3,14 @@
 @source "./app";
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
 
+@theme {
+  --font-family-sans: 'Poppins', sans-serif;
+}
+
 :root {
   color-scheme: light;
-  --font-sans: 'Geist Sans', sans-serif;
+  --font-sans: 'Poppins', sans-serif;
+  font-family: var(--font-sans); 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.147 0.004 49.25);
@@ -37,6 +42,7 @@
 
 .dark {
   color-scheme: dark;
+  font-family: var(--font-sans);
   --background: oklch(0.147 0.004 49.25);
   --foreground: oklch(0.985 0.001 106.423);
   --card: oklch(0.216 0.006 56.043);
@@ -63,4 +69,8 @@
   --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
+}
+
+body {
+  font-family: var(--font-sans);
 }
