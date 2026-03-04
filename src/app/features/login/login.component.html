@@ -1,17 +1,19 @@
 <main class="relative flex min-h-screen items-center justify-center bg-background p-4 overflow-hidden">
-  
-  <div cdkDrag class="relative w-full max-w-xs cursor-move [perspective:1000px] active:cursor-grabbing">
-    
-    <div class="relative h-full w-full rounded-2xl shadow-2xl transition-transform duration-700 [transform-style:preserve-3d]"
-         [style.transform]="isFlipped() ? 'rotateY(180deg)' : 'rotateY(0deg)'">
 
-      <div class="flex flex-col items-center gap-10 rounded-2xl border bg-card px-6 pb-8 pt-12 [backface-visibility:hidden]">
-        
-        <div cdkDragHandle class="absolute left-1/2 top-4 -translate-x-1/2 text-muted-foreground transition-colors hover:text-foreground">
+  <div cdkDrag class="relative w-full max-w-xs cursor-move perspective-[1000px] active:cursor-grabbing">
+
+    <div class="relative h-full w-full rounded-2xl shadow-2xl transition-transform duration-700 transform-3d"
+      [style.transform]="isFlipped() ? 'rotateY(180deg)' : 'rotateY(0deg)'">
+
+      <div class="flex flex-col items-center gap-10 rounded-2xl border bg-card px-6 pb-8 pt-12 backface-hidden">
+
+        <div cdkDragHandle
+          class="absolute left-1/2 top-4 -translate-x-1/2 text-muted-foreground transition-colors hover:text-foreground">
           <ng-icon hlm size="sm" name="lucideGripHorizontal" />
         </div>
 
-        <button (click)="toggleFlip()" class="absolute right-4 top-4 text-muted-foreground transition-colors hover:text-yellow-400">
+        <button (click)="toggleFlip()"
+          class="absolute right-4 top-4 text-muted-foreground transition-colors hover:text-yellow-400">
           <ng-icon hlm size="sm" name="lucideStar" />
         </button>
 
@@ -22,35 +24,37 @@
           </p>
         </div>
 
-        <button hlmBtn class="w-full max-w-50 font-medium shadow-sm transition-all" 
-            [disabled]="isLoading()" 
-            (click)="login()">
+        <button hlmBtn class="w-full max-w-50 font-medium shadow-sm transition-all" [disabled]="isLoading()"
+          (click)="login()">
           @if (isLoading()) {
-            <ng-icon hlm size="sm" name="lucideLoader2" class="mr-2 animate-spin" />
-            Entrando...
+          <ng-icon hlm size="sm" name="lucideLoader2" class="mr-2 animate-spin" />
+          Entrando...
           } @else {
-            <ng-icon hlm size="sm" name="lucideGithub" class="mr-2" />
-            Entrar com GitHub
+          <ng-icon hlm size="sm" name="lucideGithub" class="mr-2" />
+          Entrar com GitHub
           }
         </button>
 
-        <p class="max-w-[200px] text-center text-[10px] leading-relaxed text-muted-foreground pointer-events-none">
+        <p class="max-w-50 text-center text-[10px] leading-relaxed text-muted-foreground pointer-events-none">
           Ao entrar você declara que aceita os
-          <a href="#" class="pointer-events-auto font-semibold text-muted-foreground underline underline-offset-4 transition-colors hover:text-primary">
+          <a href="#"
+            class="pointer-events-auto font-semibold text-muted-foreground underline underline-offset-4 transition-colors hover:text-primary">
             Termos de acesso
           </a>
           ao sistema Valora.
         </p>
       </div>
 
-      <div class="absolute inset-0 flex flex-col rounded-2xl border bg-card p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-        
-        <button (click)="toggleFlip()" class="absolute right-4 top-4 text-muted-foreground transition-colors hover:text-foreground">
+      <div
+        class="absolute inset-0 flex flex-col rounded-2xl border bg-card p-6 backface-hidden transform-[rotateY(180deg)]">
+
+        <button (click)="toggleFlip()"
+          class="absolute right-4 top-4 text-muted-foreground transition-colors hover:text-foreground">
           <ng-icon hlm size="sm" name="lucideX" />
         </button>
 
         <div class="flex h-full flex-col justify-between pt-4 text-center cursor-default">
-          
+
           <div>
             <h2 class="text-xl font-bold text-foreground">Avalie o Valora</h2>
             <p class="text-xs text-muted-foreground mt-1">O que achou desta tela?</p>
@@ -58,23 +62,18 @@
 
           <div class="flex justify-center gap-1 my-4">
             @for (star of stars; track star) {
-              <button 
-                type="button"
-                (click)="setRating(star)" 
-                (mouseenter)="hoverRating.set(star)" 
-                (mouseleave)="hoverRating.set(0)"
-                class="transition-all hover:scale-110"
-                [class.text-yellow-400]="star <= (hoverRating() || rating())"
-                [class.text-muted-foreground]="star > (hoverRating() || rating())">
-                <ng-icon hlm size="lg" name="lucideStar" [class.fill-current]="star <= (hoverRating() || rating())" />
-              </button>
+            <button type="button" (click)="setRating(star)" (mouseenter)="hoverRating.set(star)"
+              (mouseleave)="hoverRating.set(0)" class="transition-all hover:scale-110"
+              [class.text-yellow-400]="star <= (hoverRating() || rating())"
+              [class.text-muted-foreground]="star > (hoverRating() || rating())">
+              <ng-icon hlm size="lg" name="lucideStar" [class.fill-current]="star <= (hoverRating() || rating())" />
+            </button>
             }
           </div>
 
-          <textarea 
-            class="w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" 
-            rows="3" 
-            placeholder="Deixe um comentário legal..."></textarea>
+          <textarea [value]="feedbackText()" (input)="feedbackText.set($any($event.target).value)"
+            class="w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            rows="3" placeholder="Deixe um comentário legal..."></textarea>
 
           <button hlmBtn variant="secondary" class="w-full mt-4" (click)="submitReview()">
             Enviar feedback
@@ -87,18 +86,21 @@
   </div>
 
   <footer class="absolute bottom-6 flex flex-col items-center gap-2 text-center text-xs text-muted-foreground">
-     <p>
-      Desenvolvido por 
-      <a href="https://linkedin.com/in/seu-perfil" target="_blank" rel="noopener noreferrer" class="font-medium text-foreground underline underline-offset-4 hover:text-primary transition-colors">
+    <p>
+      Desenvolvido por
+      <a href="https://linkedin.com/in/seu-perfil" target="_blank" rel="noopener noreferrer"
+        class="font-medium text-foreground underline underline-offset-4 hover:text-primary transition-colors">
         Victor Moura
       </a>
     </p>
     <div class="flex gap-4">
-      <a href="https://github.com/seu-usuario" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">
+      <a href="https://github.com/seu-usuario" target="_blank" rel="noopener noreferrer"
+        class="hover:text-foreground transition-colors">
         Meu GitHub
       </a>
       <span>&middot;</span>
-      <a href="https://github.com/seu-usuario/valora" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">
+      <a href="https://github.com/seu-usuario/valora" target="_blank" rel="noopener noreferrer"
+        class="hover:text-foreground transition-colors">
         Repositório do Projeto
       </a>
     </div>
