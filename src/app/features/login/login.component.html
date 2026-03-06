@@ -24,8 +24,7 @@
           </p>
         </div>
 
-        <button hlmBtn class="w-full max-w-50 font-medium shadow-sm transition-all" [disabled]="isLoading()"
-          (click)="login()">
+        <button type="button" hlmBtn class="w-full max-w-50 font-medium shadow-sm transition-all" [disabled]="isLoading()" (click)="login()">
           @if (isLoading()) {
             <ng-icon hlm size="sm" name="lucideLoader2" class="mr-2 animate-spin" />
             Entrando...

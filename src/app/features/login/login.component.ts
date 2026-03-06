@@ -4,7 +4,7 @@ import { HlmIcon } from '@spartan-ng/helm/icon';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { lucideGithub, lucideLoader2, lucideGripHorizontal, lucideStar, lucideX } from '@ng-icons/lucide'; 
-import { AuthService } from '../../core/services/auth/auth';
+import { AuthService } from '../../core/services/auth/auth.service';
 import { EvaluationService } from '../../core/services/evaluation/evaluation';
 
 @Component({
@@ -28,7 +28,7 @@ export class LoginComponent {
 
   public login(): void {
     this.isLoading.set(true);
-    this._authService.loginWithGithub();
+    this._authService.loginWithGitHub();
     
     // Fallback visual caso o redirecionamento demore
     setTimeout(() => this.isLoading.set(false), 2000);
