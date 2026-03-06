@@ -1,5 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http'; // 1. Novo import
+  import { Component, inject, signal } from '@angular/core';
 import { HlmButton } from '../../../../libs/ui/button/src/lib/hlm-button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -16,54 +15,60 @@ import { EvaluationService } from '../../core/services/evaluation/evaluation';
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  private authService = inject(AuthService);
-  private evaluationService = inject(EvaluationService);
-  private http = inject(HttpClient); // 2. Injetando o HttpClient para o teste
+  // Padrão de nomenclatura para injeções privadas (Clean Code)
+  private readonly _authService = inject(AuthService);
+  private readonly _evaluationService = inject(EvaluationService);
 
-  isLoading = signal(false);
-  isFlipped = signal(false);
-  rating = signal(0);
-  hoverRating = signal(0);
-  stars = [1, 2, 3, 4, 5];
-  feedbackText = signal('');
+  public isLoading = signal(false);
+  public isFlipped = signal(false);
+  public rating = signal(0);
+  public hoverRating = signal(0);
+  public stars = [1, 2, 3, 4, 5];
+  public feedbackText = signal('');
 
-  login() {
+  public login(): void {
     this.isLoading.set(true);
-    this.authService.loginWithGithub();
+    this._authService.loginWithGithub();
     
-    setTimeout(() => {
-      this.isLoading.set(false);
-    }, 2000);
+    // Fallback visual caso o redirecionamento demore
+    setTimeout(() => this.isLoading.set(false), 2000);
   }
 
-  toggleFlip() {
-    this.isFlipped.set(!this.isFlipped());
+  public toggleFlip(): void {
+    // Abordagem funcional do Signal (DRY)
+    this.isFlipped.update(flipped => !flipped);
   }
 
-  setRating(star: number) {
+  public setRating(star: number): void {
     this.rating.set(star);
   }
 
-  submitReview() {
-    this.evaluationService.submitAppEvaluation(this.rating(), this.feedbackText())
+  // Método tipado para limpar o HTML
+  public updateFeedback(event: Event): void {
+    const target = event.target as HTMLTextAreaElement;
+    this.feedbackText.set(target.value);
+  }
+
+  public submitReview(): void {
+    this._evaluationService.submitAppEvaluation(this.rating(), this.feedbackText())
       .subscribe({
-        next: (response) => {
-          console.log('Avaliação salva com sucesso!', response);
+        next: () => {
           this.rating.set(0);
           this.feedbackText.set('');
           this.toggleFlip();
         },
-        error: (err) => {
-          // O console.error pode continuar aqui se quiser, mas o Toast já vai aparecer globalmente
-          console.error('Erro na chamada', err);
-          this.toggleFlip();
+        error: () => {
+          this.toggleFlip(); // O toast global do interceptor cuidará do aviso
         }
       });
   }
 
-  // 3. Método para forçar o erro no interceptor
-  simulateError() {
-    // Faz uma requisição para uma porta que (provavelmente) não tem nada rodando
-    this.http.get('http://localhost:9999/api/simular-falha').subscribe();
+  
+
+  public simulateError(): void {
+    // Delegando a responsabilidade do HTTP para o serviço (SRP)
+    // Crie esse método lá no seu EvaluationService contendo o this.http.get(...)
+    //this._evaluationService.simulateError(); 
   }
 }
+  
